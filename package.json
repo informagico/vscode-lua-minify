@@ -1,0 +1,72 @@
+{
+	"name": "vscode-lua-minify",
+	"displayName": "LUA Minify",
+	"description": "Minify LUA source code",
+	"version": "0.4.2",
+	"publisher": "informagico",
+	"author": {
+		"name": "Alessandro Magoga",
+		"email": "alessandro.magoga92@gmail.com"
+	},
+	"license": "MIT",
+	"galleryBanner": {
+		"color": "#313191",
+		"theme": "dark"
+	},
+	"icon": "images/logo.png",
+	"categories": [ "Other", "Formatters", "Programming Languages" ],
+	"engines": {
+		"vscode": "^1.40.0"
+	},
+	"keywords": [
+		"minifier",
+		"formatter",
+		"format",
+		"compressor",
+		"compress",
+		"minify",
+		"minifier",
+		"reduce",
+		"lua",
+		"elua"
+	],
+	"bugs": {
+		"url": "https://github.com/informagico/vscode-lua-minify/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/informagico/vscode-lua-minify/issues"
+	},
+	"homepage": "https://github.com/informagico/vscode-lua-minify",
+	"activationEvents": [ "onCommand:extension.minifyLuaCode" ],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.minifyLuaCode",
+				"title": "LUA Minify: Minify"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^10.12.21",
+		"@types/vscode": "^1.40.0",
+		"glob": "^7.1.4",
+		"mocha": "^6.1.4",
+		"typescript": "^3.3.1",
+		"tslint": "^5.12.1",
+		"vscode-test": "^1.0.2"
+	},
+	"dependencies": {
+		"luamin": "^1.0.4"
+	}
+}
