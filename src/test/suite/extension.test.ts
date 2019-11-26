@@ -18,7 +18,7 @@ suite('Extension Test Suite', () => {
 		assert.equal(myExtension.minify(''), '')
 	})
 
-	test('Test if minify works with valid lua code', () => {
+	test('Test if minify works with valid Lua code', () => {
 		assert.equal(
 			myExtension.minify(`function newClass(name, baseClass)
 									baseClass = baseClass or Object
@@ -28,7 +28,7 @@ suite('Extension Test Suite', () => {
 		)
 	})
 
-	test('Test if minify throws an error with invalid lua code', () => {
+	test('Test if minify throws an error with invalid Lua code', () => {
 		assert.throws(
 			() => myExtension.minify('this should throw an error'),
 			new Error("SyntaxError: [1:0] unexpected identifier 'this' near 'throw'")

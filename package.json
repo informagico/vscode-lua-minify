@@ -1,8 +1,8 @@
 {
 	"name": "vscode-lua-minify",
-	"displayName": "LUA Minify",
-	"description": "Minify LUA source code",
-	"version": "0.4.3",
+	"displayName": "Lua Minify",
+	"description": "Minify Lua source code",
+	"version": "0.4.4",
 	"publisher": "informagico",
 	"author": {
 		"name": "Alessandro Magoga",
@@ -44,7 +44,7 @@
 		"commands": [
 			{
 				"command": "extension.minifyLuaCode",
-				"title": "LUA Minify: Minify"
+				"title": "Lua Minify: Minify"
 			}
 		]
 	},
