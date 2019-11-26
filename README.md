@@ -2,6 +2,10 @@
 
 This extension helps you to minify on-the-fly any lua source file.
 
+![Version](https://vsmarketplacebadge.apphb.com/version-short/informagico.vscode-lua-minify.svg)
+![Installs](https://vsmarketplacebadge.apphb.com/installs/informagico.vscode-lua-minify.svg)
+![Rating](https://vsmarketplacebadge.apphb.com/rating-star/informagico.vscode-lua-minify.svg)
+
 ## Usage
 
 Use the command *`LUA Minify: Minify`* to process current open file

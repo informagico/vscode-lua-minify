@@ -2,7 +2,7 @@
 	"name": "vscode-lua-minify",
 	"displayName": "LUA Minify",
 	"description": "Minify LUA source code",
-	"version": "0.4.2",
+	"version": "0.4.3",
 	"publisher": "informagico",
 	"author": {
 		"name": "Alessandro Magoga",
@@ -35,7 +35,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/informagico/vscode-lua-minify/issues"
+		"url": "https://github.com/informagico/vscode-lua-minify"
 	},
 	"homepage": "https://github.com/informagico/vscode-lua-minify",
 	"activationEvents": [ "onCommand:extension.minifyLuaCode" ],
