@@ -6,6 +6,11 @@ This extension helps you to minify on-the-fly any Lua source file.
 ![Installs](https://vsmarketplacebadge.apphb.com/installs/informagico.vscode-lua-minify.svg)
 ![Rating](https://vsmarketplacebadge.apphb.com/rating-star/informagico.vscode-lua-minify.svg)
 
+## Feature
+- [x] Minify the whole file
+- [ ] Minify selected code
+- [ ] Generate minified .min.lua file
+
 ## Usage
 
 Use the command *`Lua Minify: Minify`* to process current open file
