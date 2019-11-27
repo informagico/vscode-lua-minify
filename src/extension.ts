@@ -1,5 +1,7 @@
 import * as vscode from 'vscode'
+import * as fs from 'fs'
 const luamin = require('luamin')
+const path = require('path')
 
 export function activate(context: vscode.ExtensionContext) {
 	/**
@@ -8,13 +10,13 @@ export function activate(context: vscode.ExtensionContext) {
 	let minifyLuaFile = vscode.commands.registerCommand('vscode-lua-minify.minifyLuaFile', () => {
 		let luaCodeMin: string = ''
 
-		let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+		// get full document text
+		let luaCode: string | undefined = getText()
 
-		if (!editor) {
+		if (!luaCode) {
+			vscode.window.showErrorMessage('Unable to get Lua code!')
 			return
 		}
-
-		let luaCode: string = editor.document.getText()
 
 		try {
 			luaCodeMin = luamin.minify(luaCode)
@@ -23,20 +25,8 @@ export function activate(context: vscode.ExtensionContext) {
 			return
 		}
 
-		// get document full range
-		let fullRange: vscode.Range | undefined = getFullRange(luaCode)
-
-		if (!fullRange) {
-			return
-		}
-
 		// replace file content
-		editor.edit((editBuilder: vscode.TextEditorEdit) => {
-			editBuilder.replace(fullRange as vscode.Range, luaCodeMin)
-		})
-
-		// save the file
-		// editor.document.save()
+		editFileText(false, luaCodeMin)
 	})
 
 	context.subscriptions.push(minifyLuaFile)
@@ -47,13 +37,12 @@ export function activate(context: vscode.ExtensionContext) {
 	let minifyLuaSelection = vscode.commands.registerCommand('vscode-lua-minify.minifyLuaSelection', () => {
 		let luaCodeMin: string = ''
 
-		let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+		let luaCode: string | undefined = getText(true)
 
-		if (!editor) {
+		if (!luaCode) {
+			vscode.window.showErrorMessage('Unable to get Lua code!')
 			return
 		}
-
-		let luaCode: string = editor.document.getText(getSelectionRange())
 
 		try {
 			luaCodeMin = luamin.minify(luaCode)
@@ -62,16 +51,67 @@ export function activate(context: vscode.ExtensionContext) {
 			return
 		}
 
-		// get document selection range
-		let selectionRange: vscode.Range | undefined = getSelectionRange()
-
 		// replace file content
-		editor.edit((editBuilder: vscode.TextEditorEdit) => {
-			editBuilder.replace(selectionRange as vscode.Range, luaCodeMin)
-		})
+		editFileText(true, luaCodeMin)
 	})
 
 	context.subscriptions.push(minifyLuaSelection)
+
+	/**
+	 * Create a minified version (.min) of the Lua code file
+	 */
+	let createMinifiedFile = vscode.commands.registerCommand('vscode-lua-minify.createMinifiedFile', () => {
+		let luaCodeMin: string = ''
+
+		let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+
+		if (!editor) {
+			return
+		}
+
+		if (!isActiveDocumentFile()) {
+			vscode.window.showWarningMessage('You need to save the file first!')
+			return
+		}
+
+		// save document
+		editor.document.save()
+
+		// get lua code
+		let luaCode: string | undefined = getText()
+
+		if (!luaCode) {
+			vscode.window.showErrorMessage('Unable to get Lua code!')
+			return
+		}
+
+		// minify the code
+		try {
+			luaCodeMin = luamin.minify(luaCode)
+		} catch (error) {
+			vscode.window.showErrorMessage('' + error)
+			return
+		}
+
+		// generate new minified file name
+		let newFilePath: string | undefined = getNewMinFilePath()
+
+		if (!newFilePath) {
+			vscode.window.showErrorMessage('Unable to create the minified file!')
+			return
+		}
+
+		// save the new file
+		fs.writeFileSync(newFilePath, luaCodeMin, 'utf8')
+
+		// open the newly created file in the editor
+		var openPath = vscode.Uri.file(newFilePath)
+		vscode.workspace.openTextDocument(openPath).then((doc) => {
+			vscode.window.showTextDocument(doc)
+		})
+	})
+
+	context.subscriptions.push(createMinifiedFile)
 }
 
 export function deactivate() {}
@@ -93,34 +133,105 @@ export function minify(luaCode: string): string {
 }
 
 /**
- * Returns the selection Range object
+ * Returns the requested document text
  *
  * @export
- * @returns {(vscode.Range | undefined)}
+ * @param {boolean} [selection=false] Defines if you want the selection or whole text
+ * @returns {(string | undefined)}
  */
-export function getSelectionRange(): vscode.Range | undefined {
+export function getText(selection: boolean = false): string | undefined {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 
-	if (editor) {
-		return new vscode.Range(editor.selection.start, editor.selection.end)
+	if (!editor) {
+		return undefined
 	}
 
-	return undefined
+	if (selection) {
+		return editor.document.getText(getRange(true))
+	} else {
+		return editor.document.getText()
+	}
 }
 
 /**
- * Returns the whole document range by given content
+ * Returns the requested document text Range
  *
  * @export
- * @param {string} luaCode The Lua code of the whole document
+ * @param {boolean} [selection=false] Defines if you want the selection or whole text range
  * @returns {(vscode.Range | undefined)}
  */
-export function getFullRange(luaCode: string): vscode.Range | undefined {
+export function getRange(selection: boolean = false): vscode.Range | undefined {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 
-	if (editor) {
-		return new vscode.Range(editor.document.positionAt(0), editor.document.positionAt(luaCode.length))
+	if (!editor) {
+		return undefined
 	}
 
-	return undefined
+	if (selection) {
+		return new vscode.Range(editor.selection.start, editor.selection.end)
+	} else {
+		let luaCode: string | undefined = getText(false)
+
+		if (!luaCode) {
+			return undefined
+		}
+
+		return new vscode.Range(editor.document.positionAt(0), editor.document.positionAt(luaCode.length))
+	}
+}
+
+/**
+ * Returns if the current open document file exists or it is still unsaved
+ *
+ * @export
+ * @returns {boolean}
+ */
+export function isActiveDocumentFile(): boolean | undefined {
+	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+
+	if (!editor) {
+		return undefined
+	}
+
+	return fs.existsSync(editor.document.fileName)
+}
+
+/**
+ * Edit the current opened file with given text
+ *
+ * @export
+ * @param {boolean} selection
+ * @param {string} text
+ */
+export function editFileText(selection: boolean, text: string) {
+	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+	let range = getRange(selection)
+
+	if (!editor || !range) {
+		throw new Error('Unable to edit the file!')
+	}
+
+	editor.edit((editBuilder: vscode.TextEditorEdit) => {
+		editBuilder.replace(range as vscode.Range, text)
+	})
+}
+
+/**
+ * Returns the new minified file name
+ *
+ * @export
+ * @returns {string}
+ */
+export function getNewMinFilePath(): string | undefined {
+	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+
+	if (!editor) {
+		return undefined
+	}
+
+	return path.format({
+		dir: path.dirname(editor.document.fileName),
+		name: path.parse(editor.document.fileName).name,
+		ext: '.min' + path.extname(editor.document.fileName),
+	})
 }

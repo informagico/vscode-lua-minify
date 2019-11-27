@@ -7,9 +7,10 @@ This extension helps you to minify on-the-fly any Lua source file.
 ![Rating](https://vsmarketplacebadge.apphb.com/rating-star/informagico.vscode-lua-minify.svg)
 
 ## Feature
+
 - [x] Minify the whole file
-- [ ] Minify selected code
-- [ ] Generate minified .min.lua file
+- [x] Minify selected code
+- [x] Generate minified .min.lua file
 
 ## Usage
 
@@ -24,4 +25,5 @@ Feel free to contribute improving this extension and [let me know](https://githu
 ---
 
 ### Thanks
+
 A huge thanks to Mathias Bynens ([@mathiasbynens](https://github.com/mathiasbynens)) for building up [luamin](https://github.com/mathiasbynens/luamin) that I used as core for this extension.
