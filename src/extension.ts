@@ -2,7 +2,10 @@ import * as vscode from 'vscode'
 const luamin = require('luamin')
 
 export function activate(context: vscode.ExtensionContext) {
-	let disposable = vscode.commands.registerCommand('extension.minifyLuaCode', () => {
+	/**
+	 * Minify the whole active document text
+	 */
+	let minifyLuaFile = vscode.commands.registerCommand('vscode-lua-minify.minifyLuaFile', () => {
 		let luaCodeMin: string = ''
 
 		let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
@@ -33,15 +36,54 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 
 		// save the file
-		editor.document.save()
+		// editor.document.save()
 	})
 
-	context.subscriptions.push(disposable)
+	context.subscriptions.push(minifyLuaFile)
+
+	// /**
+	//  * Minify the selected document text
+	//  */
+	let minifyLuaSelection = vscode.commands.registerCommand('vscode-lua-minify.minifyLuaSelection', () => {
+		let luaCodeMin: string = ''
+
+		let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+
+		if (!editor) {
+			return
+		}
+
+		let luaCode: string = editor.document.getText(getSelectionRange())
+
+		try {
+			luaCodeMin = luamin.minify(luaCode)
+		} catch (error) {
+			vscode.window.showErrorMessage('' + error)
+			return
+		}
+
+		// get document selection range
+		let selectionRange: vscode.Range | undefined = getSelectionRange()
+
+		// replace file content
+		editor.edit((editBuilder: vscode.TextEditorEdit) => {
+			editBuilder.replace(selectionRange as vscode.Range, luaCodeMin)
+		})
+	})
+
+	context.subscriptions.push(minifyLuaSelection)
 }
 
 export function deactivate() {}
 
-export function minify(luaCode: string): {} {
+/**
+ * Tries to return minified version of given Lua code
+ *
+ * @export
+ * @param {string} luaCode Code to minify
+ * @returns {string} Minified code
+ */
+export function minify(luaCode: string): string {
 	// minify the code
 	try {
 		return luamin.minify(luaCode)
@@ -50,6 +92,29 @@ export function minify(luaCode: string): {} {
 	}
 }
 
+/**
+ * Returns the selection Range object
+ *
+ * @export
+ * @returns {(vscode.Range | undefined)}
+ */
+export function getSelectionRange(): vscode.Range | undefined {
+	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
+
+	if (editor) {
+		return new vscode.Range(editor.selection.start, editor.selection.end)
+	}
+
+	return undefined
+}
+
+/**
+ * Returns the whole document range by given content
+ *
+ * @export
+ * @param {string} luaCode The Lua code of the whole document
+ * @returns {(vscode.Range | undefined)}
+ */
 export function getFullRange(luaCode: string): vscode.Range | undefined {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 

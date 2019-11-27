@@ -2,7 +2,7 @@
 	"name": "vscode-lua-minify",
 	"displayName": "Lua Minify",
 	"description": "Minify Lua source code",
-	"version": "0.4.4",
+	"version": "0.5.0",
 	"publisher": "informagico",
 	"author": {
 		"name": "Alessandro Magoga",
@@ -38,13 +38,20 @@
 		"url": "https://github.com/informagico/vscode-lua-minify"
 	},
 	"homepage": "https://github.com/informagico/vscode-lua-minify",
-	"activationEvents": [ "onCommand:extension.minifyLuaCode" ],
+	"activationEvents": [
+		"onCommand:vscode-lua-minify.minifyLuaFile",
+		"onCommand:vscode-lua-minify.minifyLuaSelection"
+	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.minifyLuaCode",
+				"command": "vscode-lua-minify.minifyLuaFile",
 				"title": "Lua Minify: Minify"
+			},
+			{
+				"command": "vscode-lua-minify.minifyLuaSelection",
+				"title": "Lua Minify: Minify selection"
 			}
 		]
 	},
