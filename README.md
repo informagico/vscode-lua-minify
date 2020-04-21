@@ -18,6 +18,10 @@ Use the command *`Lua Minify: Minify`* to process current open file
 
 ![vscode-lua-minify](https://github.com/informagico/vscode-lua-minify/blob/master/images/vscode-lua-minify.gif?raw=true)
 
+Use the command *`Lua Minify: Minify Selection`* to process current selection
+
+Use the command *`Lua Minify: Generate .min file`* to process current open file and create a minified separate version
+
 ## Contributions
 
 Feel free to contribute improving this extension and [let me know](https://github.com/informagico/vscode-lua-minify/issues) if you find a bug.
