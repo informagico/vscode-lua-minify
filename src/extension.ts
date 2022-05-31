@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import * as fs from 'fs'
 const luamin = require('luamin')
 const path = require('path')
+const luaformat = require('lua-format')
 
 export function activate(context: vscode.ExtensionContext) {
 	/**
@@ -19,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		try {
-			luaCodeMin = luamin.minify(luaCode)
+			luaCodeMin = minify(luaCode)
 		} catch (error) {
 			vscode.window.showErrorMessage('' + error)
 			return
@@ -45,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		try {
-			luaCodeMin = luamin.minify(luaCode)
+			luaCodeMin = minify(luaCode)
 		} catch (error) {
 			vscode.window.showErrorMessage('' + error)
 			return
@@ -87,7 +88,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// minify the code
 		try {
-			luaCodeMin = luamin.minify(luaCode)
+			luaCodeMin = minify(luaCode)
 		} catch (error) {
 			vscode.window.showErrorMessage('' + error)
 			return
@@ -114,7 +115,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(createMinifiedFile)
 }
 
-export function deactivate() {}
+export function deactivate() { }
 
 /**
  * Tries to return minified version of given Lua code
@@ -123,13 +124,33 @@ export function deactivate() {}
  * @param {string} luaCode Code to minify
  * @returns {string} Minified code
  */
-export function minify(luaCode: string): string {
-	// minify the code
-	try {
-		return luamin.minify(luaCode)
-	} catch (error) {
-		throw new Error(error)
+export function minify(code: string): string {
+	let luaCodeMin: string = ''
+
+	var flavour = vscode.workspace.getConfiguration('vscode-lua-minify').get('flavour', 'luamin')
+
+	switch (flavour) {
+		case "lua-format":
+			var renameVariables = vscode.workspace.getConfiguration('vscode-lua-minify').get('renameVariables', false)
+			var renameGlobals = vscode.workspace.getConfiguration('vscode-lua-minify').get('renameGlobals', false)
+			var solveMath = vscode.workspace.getConfiguration('vscode-lua-minify').get('solveMath', false)
+
+			const settings = {
+				RenameVariables: renameVariables,
+				RenameGlobals: renameGlobals,
+				SolveMath: solveMath
+			}
+
+			luaCodeMin = luaformat.Minify(code, settings)
+			luaCodeMin = luaCodeMin.replace("--discord.gg/boronide, code generated using luamin.js™\n\n\n\n", "")
+			break;
+
+		default:
+			luaCodeMin = luamin.minify(code)
+			break;
 	}
+
+	return luaCodeMin
 }
 
 /**
@@ -139,7 +160,7 @@ export function minify(luaCode: string): string {
  * @param {boolean} [selection=false] Defines if you want the selection or whole text
  * @returns {(string | undefined)}
  */
-export function getText(selection: boolean = false): string | undefined {
+function getText(selection: boolean = false): string | undefined {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 
 	if (!editor) {
@@ -160,7 +181,7 @@ export function getText(selection: boolean = false): string | undefined {
  * @param {boolean} [selection=false] Defines if you want the selection or whole text range
  * @returns {(vscode.Range | undefined)}
  */
-export function getRange(selection: boolean = false): vscode.Range | undefined {
+function getRange(selection: boolean = false): vscode.Range | undefined {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 
 	if (!editor) {
@@ -186,7 +207,7 @@ export function getRange(selection: boolean = false): vscode.Range | undefined {
  * @export
  * @returns {boolean}
  */
-export function isActiveDocumentFile(): boolean | undefined {
+function isActiveDocumentFile(): boolean | undefined {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 
 	if (!editor) {
@@ -203,7 +224,7 @@ export function isActiveDocumentFile(): boolean | undefined {
  * @param {boolean} selection
  * @param {string} text
  */
-export function editFileText(selection: boolean, text: string) {
+function editFileText(selection: boolean, text: string) {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 	let range = getRange(selection)
 
@@ -222,7 +243,7 @@ export function editFileText(selection: boolean, text: string) {
  * @export
  * @returns {string}
  */
-export function getNewMinFilePath(): string | undefined {
+function getNewMinFilePath(): string | undefined {
 	let editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor
 
 	if (!editor) {
