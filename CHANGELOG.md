@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.7.0] - 2022-05-31
+
+- Feature: added new flavour 'lua-format' to support `Luau` language formatting (settings needs to be adjusted, see README)
+
 ## [0.6.1] - 2020-04-21
 
 - Updated dependencies
