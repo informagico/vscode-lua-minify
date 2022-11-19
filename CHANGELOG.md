@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.7.1] - 2022-11-19
+
+- Feature: manually included npm package `lua-format` to fetch latest features.
+
 ## [0.7.0] - 2022-05-31
 
 - Feature: added new flavour 'lua-format' to support `Luau` language formatting (settings needs to be adjusted, see README)

@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import * as fs from 'fs'
 const luamin = require('luamin')
 const path = require('path')
-const luaformat = require('lua-format')
+const luaformat = require('./luamin.js')
 
 export function activate(context: vscode.ExtensionContext) {
 	/**
