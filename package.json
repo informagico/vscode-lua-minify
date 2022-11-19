@@ -103,8 +103,8 @@
 		"test": "node ./out/test/runTest.js",
 		"pack": "vsce package",
 		"pack-pre-release": "vsce package --pre-release",
-		"publish": "npm run pack && vsce publish",
-		"publish-pre-release": "npm run pack-pre-release && vsce publish"
+		"publish": "vsce publish",
+		"publish-pre-release": "vsce publish --pre-release"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.2.0",
