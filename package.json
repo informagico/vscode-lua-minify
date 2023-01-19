@@ -48,7 +48,7 @@
 		"commands": [
 			{
 				"command": "vscode-lua-minify.minifyLuaFile",
-				"title": "Lua Minify: Minify"
+				"title": "Lua Minify: Minify (current file)"
 			},
 			{
 				"command": "vscode-lua-minify.minifyLuaWorkspace",
@@ -60,7 +60,7 @@
 			},
 			{
 				"command": "vscode-lua-minify.createMinifiedFile",
-				"title": "Lua Minify: Generate .min file"
+				"title": "Lua Minify: Generate .min file (current file)"
 			},
 			{
 				"command": "vscode-lua-minify.createMinifiedFileWorkspace",
