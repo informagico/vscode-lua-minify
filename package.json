@@ -42,7 +42,13 @@
 		"url": "https://github.com/informagico/vscode-lua-minify"
 	},
 	"homepage": "https://github.com/informagico/vscode-lua-minify",
-	"activationEvents": [],
+	"activationEvents": [
+		"onCommand:vscode-lua-minify.minifyLuaFile",
+		"onCommand:vscode-lua-minify.minifyLuaWorkspace",
+		"onCommand:vscode-lua-minify.minifyLuaSelection",
+		"onCommand:vscode-lua-minify.createMinifiedFile",
+		"onCommand:vscode-lua-minify.createMinifiedFileWorkspace"
+	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
