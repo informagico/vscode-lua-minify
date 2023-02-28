@@ -36,7 +36,7 @@ This setting can prevent the minification of unwanted files (to leave untouched)
 An example of the newly added feature:
 
 ```json
-"vscode-lua-minify.flavour": [
+"vscode-lua-minify.excludeGlobs": [
   "foo.lua",
   "bar.lua"
 ]
