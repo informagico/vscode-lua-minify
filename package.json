@@ -2,7 +2,7 @@
 	"name": "vscode-lua-minify",
 	"displayName": "Lua Minify",
 	"description": "Minify Lua source code",
-	"version": "0.7.1",
+	"version": "1.1.1",
 	"publisher": "informagico",
 	"author": {
 		"name": "Alessandro Magoga",
@@ -44,15 +44,21 @@
 	"homepage": "https://github.com/informagico/vscode-lua-minify",
 	"activationEvents": [
 		"onCommand:vscode-lua-minify.minifyLuaFile",
+		"onCommand:vscode-lua-minify.minifyLuaWorkspace",
 		"onCommand:vscode-lua-minify.minifyLuaSelection",
-		"onCommand:vscode-lua-minify.createMinifiedFile"
+		"onCommand:vscode-lua-minify.createMinifiedFile",
+		"onCommand:vscode-lua-minify.createMinifiedFileWorkspace"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "vscode-lua-minify.minifyLuaFile",
-				"title": "Lua Minify: Minify"
+				"title": "Lua Minify: Minify (current file)"
+			},
+			{
+				"command": "vscode-lua-minify.minifyLuaWorkspace",
+				"title": "Lua Minify: Minify (workspace)"
 			},
 			{
 				"command": "vscode-lua-minify.minifyLuaSelection",
@@ -60,37 +66,45 @@
 			},
 			{
 				"command": "vscode-lua-minify.createMinifiedFile",
-				"title": "Lua Minify: Generate .min file"
+				"title": "Lua Minify: Generate .min file (current file)"
+			},
+			{
+				"command": "vscode-lua-minify.createMinifiedFileWorkspace",
+				"title": "Lua Minify: Generate .min file (workspace)"
 			}
-		]
-	},
-	"configuration": {
-		"type": "object",
-		"title": "VSCode Lua Minify Extension settings",
-		"properties": {
-			"vscode-lua-minify.flavour": {
-				"type": "string",
-				"enum": [
-					"luamin",
-					"lua-format"
-				],
-				"default": "luamin",
-				"description": "Identify which package is going to be used to minify the code."
-			},
-			"vscode-lua-minify.renameVariables": {
-				"type": "boolean",
-				"default": false,
-				"description": "Available only if 'lua-format' is selected. Defines if the variables should be renamed."
-			},
-			"vscode-lua-minify.renameGlobals": {
-				"type": "boolean",
-				"default": false,
-				"description": "Available only if 'lua-format' is selected. Defines if the globals should be renamed."
-			},
-			"vscode-lua-minify.solveMath": {
-				"type": "boolean",
-				"default": false,
-				"description": "Available only if 'lua-format' is selected. Defines if the math should be solved."
+		],
+		"configuration": {
+			"title": "LuaMinify",
+			"properties": {
+				"vscode-lua-minify.flavour": {
+					"type": "string",
+					"enum": [
+						"luamin",
+						"lua-format"
+					],
+					"default": "luamin",
+					"description": "Identify which package is going to be used to minify the code."
+				},
+				"vscode-lua-minify.renameVariables": {
+					"type": "boolean",
+					"default": false,
+					"description": "Available only if 'lua-format' is selected. Defines if the variables should be renamed."
+				},
+				"vscode-lua-minify.renameGlobals": {
+					"type": "boolean",
+					"default": false,
+					"description": "Available only if 'lua-format' is selected. Defines if the globals should be renamed."
+				},
+				"vscode-lua-minify.solveMath": {
+					"type": "boolean",
+					"default": false,
+					"description": "Available only if 'lua-format' is selected. Defines if the math should be solved."
+				},
+				"vscode-lua-minify.excludeGlobs": {
+					"type": "array",
+					"default": [],
+					"description": "An array of GlobPattern to exclude from search."
+				}
 			}
 		}
 	},
@@ -119,6 +133,7 @@
 		"vscode-test": "^1.3.0"
 	},
 	"dependencies": {
+		"jschardet": "^3.0.0",
 		"luamin": "^1.0.4",
 		"path": "^0.12.7"
 	}
