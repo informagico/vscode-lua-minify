@@ -9,13 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - run: npm install
+      - uses: lannonbr/vsce-action@3.0.0
         with:
-          node-version: 16
-      - run: npm ci
-      - name: Publish to Visual Studio Marketplace
-        uses: HaaLeo/publish-vscode-extension@v1
-        with:
-          pat: ${{ secrets.VSCE_TOKEN }}
-          registryUrl: https://marketplace.visualstudio.com
-          preRelease: true
+          args: "publish -p $VSCE_TOKEN --pre-release"
+        env:
+          VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
