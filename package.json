@@ -2,7 +2,7 @@
 	"name": "vscode-lua-minify",
 	"displayName": "Lua Minify",
 	"description": "Minify Lua source code",
-	"version": "1.4.1",
+	"version": "1.5.0",
 	"publisher": "informagico",
 	"author": {
 		"name": "Alessandro Magoga",
