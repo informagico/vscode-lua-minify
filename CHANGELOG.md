@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.4.1] - 2024-10-04
+
+- Fix: update CHANGELOG
+
+## [1.4.0] - 2024-10-04
+
+- Fix: upgrade all dependencies and code cleanup. Also aligned release and pre-release versions.
+
+## [0.9.0]
+
+- Feature: new setting has been added to support file exclusion on workspace minification (see README)
+
 ## [0.7.1] - 2022-11-19
 
 - Feature: manually included npm package `lua-format` to fetch latest features.
