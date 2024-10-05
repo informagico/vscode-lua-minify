@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.5.0] - 2024-10-04
+
+- Fix: follow VS SemVer conventions (pre-release)
+
 ## [1.4.1] - 2024-10-04
 
 - Fix: update CHANGELOG
