@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.6.1] - 2025-11-20
+
+- Fix: update dependencies
+
 ## [1.6.0] - 2024-10-04
 
 - Fix: follow VS SemVer conventions (release)

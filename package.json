@@ -2,7 +2,7 @@
 	"name": "vscode-lua-minify",
 	"displayName": "Lua Minify",
 	"description": "Minify Lua source code",
-	"version": "1.6.0",
+	"version": "1.6.1",
 	"publisher": "informagico",
 	"author": {
 		"name": "Alessandro Magoga",
@@ -107,9 +107,7 @@
 		"compile": "npm run copy:dist && tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"pack": "vsce package",
-		"pack-pre-release": "vsce package --pre-release",
-		"publish": "vsce publish",
-		"publish-pre-release": "vsce publish --pre-release"
+		"publish": "vsce publish"
 	},
 	"devDependencies": {
 		"@types/glob": "^8.1.0",
